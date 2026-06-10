@@ -2,6 +2,7 @@ package com.delduck.agendadortarefas.controller;
 
 import com.delduck.agendadortarefas.business.TarefasService;
 import com.delduck.agendadortarefas.business.dto.TarefasDTO;
+import com.delduck.agendadortarefas.infrastructure.enums.StatusNotificacaoEnum;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,6 +37,25 @@ public class TarefasController {
     @GetMapping
     public ResponseEntity<List<TarefasDTO>> buscaListaTarefasPorPeriodo(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(tarefasService.buscaTarefasAgendadasPorEmail(token));
+    }
+
+    @DeleteMapping("/{idTarefa}")
+    public ResponseEntity<Void> deletarTarefaPorId(@PathVariable String idTarefa) {
+        tarefasService.deletaTarefaPorId(idTarefa);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{idTarefa}")
+    public ResponseEntity<TarefasDTO> alterarStatusNotificacao(@RequestParam StatusNotificacaoEnum status,
+                                                               @PathVariable String idTarefa) {
+        return ResponseEntity.ok(tarefasService.alteraStatus(status, idTarefa));
+    }
+
+    @PutMapping
+    public ResponseEntity<TarefasDTO> updateTarefas(@RequestBody TarefasDTO tarefasDTO,
+                                                    @RequestParam String id) {
+        return ResponseEntity.ok(tarefasService.updateTarefas(tarefasDTO, id));
     }
 
 }
