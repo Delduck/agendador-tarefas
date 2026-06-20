@@ -4,12 +4,10 @@ import com.delduck.agendadortarefas.business.TarefasService;
 import com.delduck.agendadortarefas.business.dto.TarefasDTO;
 import com.delduck.agendadortarefas.infrastructure.enums.StatusNotificacaoEnum;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,7 +33,7 @@ public class TarefasController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TarefasDTO>> buscaListaTarefasPorPeriodo(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<TarefasDTO>> buscaListaTarefasPorEmail(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(tarefasService.buscaTarefasAgendadasPorEmail(token));
     }
 
