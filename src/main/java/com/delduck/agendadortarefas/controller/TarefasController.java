@@ -37,23 +37,23 @@ public class TarefasController {
         return ResponseEntity.ok(tarefasService.buscaTarefasAgendadasPorEmail(token));
     }
 
-    @DeleteMapping("/{idTarefa}")
-    public ResponseEntity<Void> deletarTarefaPorId(@PathVariable String idTarefa) {
+    @DeleteMapping
+    public ResponseEntity<Void> deletarTarefaPorId(@RequestParam("idTarefa") String idTarefa) {
         tarefasService.deletaTarefaPorId(idTarefa);
 
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{idTarefa}")
-    public ResponseEntity<TarefasDTO> alterarStatusNotificacao(@RequestParam StatusNotificacaoEnum status,
-                                                               @PathVariable String idTarefa) {
+    @PatchMapping
+    public ResponseEntity<TarefasDTO> alterarStatusNotificacao(@RequestParam("status") StatusNotificacaoEnum status,
+                                                               @RequestParam("idTarefa") String idTarefa) {
         return ResponseEntity.ok(tarefasService.alteraStatus(status, idTarefa));
     }
 
     @PutMapping
     public ResponseEntity<TarefasDTO> updateTarefas(@RequestBody TarefasDTO tarefasDTO,
-                                                    @RequestParam String id) {
-        return ResponseEntity.ok(tarefasService.updateTarefas(tarefasDTO, id));
+                                                    @RequestParam("idTarefa") String idTarefa) {
+        return ResponseEntity.ok(tarefasService.updateTarefas(tarefasDTO, idTarefa));
     }
 
 }
