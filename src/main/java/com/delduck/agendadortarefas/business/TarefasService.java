@@ -33,8 +33,10 @@ public class TarefasService {
         return tarefaConverter.paraTarefaDTO(tarefasRepository.save(tarefa));
     }
 
-    public List<TarefasDTO> buscaTarefasAgendadasPorPeriodo(LocalDateTime dataInicial, LocalDateTime dataFinal) {
-        return tarefaConverter.paraListaTarefasDTO(tarefasRepository.findByDataEventoBetween(dataInicial, dataFinal));
+    public List<TarefasDTO> buscaTarefasAgendadasPorPeriodo(LocalDateTime dataInicial,
+                                                            LocalDateTime dataFinal) {
+        return tarefaConverter.paraListaTarefasDTO(
+                tarefasRepository.findByDataEventoBetweenAndStatus(dataInicial, dataFinal, StatusNotificacaoEnum.PENDENTE));
     }
 
     public List<TarefasDTO> buscaTarefasAgendadasPorEmail(String token) {
@@ -42,17 +44,17 @@ public class TarefasService {
         return tarefaConverter.paraListaTarefasDTO(tarefasRepository.findByEmailUsuario(email));
     }
 
-    public void deletaTarefaPorId(String id) {
+    public void deletaTarefaPorId(String idTarefa) {
         try{
-            tarefasRepository.deleteById(id);
+            tarefasRepository.deleteById(idTarefa);
         }catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException("Recurso inexistente", e.getCause());
         }
     }
 
-    public TarefasDTO alteraStatus(StatusNotificacaoEnum status, String id) {
+    public TarefasDTO alteraStatus(StatusNotificacaoEnum status, String idTarefa) {
         try {
-            TarefasEntity tarefasEntity = tarefasRepository.findById(id).orElseThrow(() ->
+            TarefasEntity tarefasEntity = tarefasRepository.findById(idTarefa).orElseThrow(() ->
                     new ResourceNotFoundException("Recurso inexistente"));
             tarefasEntity.setStatus(status);
             return tarefaConverter.paraTarefaDTO(tarefasRepository.save(tarefasEntity));
@@ -61,9 +63,9 @@ public class TarefasService {
         }
     }
 
-    public TarefasDTO updateTarefas(TarefasDTO tarefasDTO, String id) {
+    public TarefasDTO updateTarefas(TarefasDTO tarefasDTO, String idTarefa) {
         try {
-            TarefasEntity tarefasEntity = tarefasRepository.findById(id).orElseThrow(() ->
+            TarefasEntity tarefasEntity = tarefasRepository.findById(idTarefa).orElseThrow(() ->
                     new ResourceNotFoundException("Recurso inexistente"));
             tarefaUpdateConverter.updateTarefas(tarefasDTO, tarefasEntity);
             return tarefaConverter.paraTarefaDTO(tarefasRepository.save(tarefasEntity));
